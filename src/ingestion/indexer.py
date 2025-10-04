@@ -12,7 +12,7 @@ from langchain_community.vectorstores import FAISS
 from rank_bm25 import BM25Okapi
 import numpy as np
 
-from src.config import INDEXES_DIR, RETRIEVAL_CONFIG, MODEL_CONFIG
+from src.config import INDEXES_DIR, RETRIEVAL_CONFIG, MODEL_CONFIG, ATTACHMENTS_DIR
 from src.utils.logger import TraceLogger
 
 logger = TraceLogger(session_id="ingestion")
@@ -109,6 +109,52 @@ class Indexer:
         
         logger.log_info(f"Created {len(documents)} chunks")
         return documents
+
+    def load_attachments_for_thread(self, thread_id: str) -> List[Dict]:
+        """
+        Load attachments linked to a specific thread.
+        
+        Args:
+            thread_id: Thread identifier
+            
+        Returns:
+            List of attachment data with linked message IDs
+        """
+        # Load attachment links
+        links_file = ATTACHMENTS_DIR / "attachment_links.json"
+        if not links_file.exists():
+            return []
+        
+        with open(links_file, 'r') as f:
+            all_links = json.load(f)
+        
+        # Filter for this thread
+        thread_links = [link for link in all_links if link['thread_id'] == thread_id]
+        
+        if not thread_links:
+            return []
+        
+        # Load attachment metadata
+        metadata_file = ATTACHMENTS_DIR / "attachment_metadata.json"
+        with open(metadata_file, 'r') as f:
+            attachments_data = json.load(f)
+        
+        # Combine link info with attachment content
+        result = []
+        for link in thread_links:
+            # Find the attachment data
+            att_data = next(
+                (att for att in attachments_data if att['filename'] == link['filename']),
+                None
+            )
+            if att_data:
+                # Add message_id to attachment data
+                att_with_link = att_data.copy()
+                att_with_link['message_id'] = link['message_id']
+                att_with_link['thread_id'] = link['thread_id']
+                result.append(att_with_link)
+        
+        return result
     
     def build_bm25_index(self, documents: List[Document]) -> BM25Okapi:
         """
@@ -201,16 +247,22 @@ class Indexer:
         logger.log_info(f"Saved indexes for thread {thread_id} to {thread_index_dir}")
     
     def index_thread(self, thread_id: str, thread_emails: List[Dict],
-                    attachments: List[Dict] = None):
+                attachments: List[Dict] = None):
         """
         Build and save all indexes for a thread.
         
         Args:
             thread_id: Thread identifier
             thread_emails: List of emails in thread
-            attachments: List of attachments (optional)
+            attachments: List of attachments (optional, will auto-load if None)
         """
         logger.log_info(f"Indexing thread {thread_id}...")
+        
+        # Auto-load attachments if not provided
+        if attachments is None:
+            attachments = self.load_attachments_for_thread(thread_id)
+            if attachments:
+                logger.log_info(f"  Found {len(attachments)} attachments for this thread")
         
         # Create chunks
         documents = self.create_chunks(thread_emails, attachments)
