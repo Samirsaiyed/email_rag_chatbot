@@ -77,12 +77,24 @@ def parse_email_date(date_str: str) -> Optional[datetime]:
     if not date_str:
         return None
     
+    # Clean the string
+    date_str = date_str.strip()
+    
     # Common email date formats
     formats = [
         "%a, %d %b %Y %H:%M:%S %z",
+        "%a, %d %b %Y %H:%M:%S %Z",
         "%d %b %Y %H:%M:%S %z",
+        "%d %b %Y %H:%M:%S %Z",
+        "%a, %d %b %Y %H:%M:%S",
+        "%d %b %Y %H:%M:%S",
         "%Y-%m-%d %H:%M:%S",
         "%Y-%m-%d",
+        "%m/%d/%Y",
+        "%m/%d/%y",
+        "%d/%m/%Y",
+        "%b %d, %Y",
+        "%B %d, %Y",
     ]
     
     for fmt in formats:
@@ -90,6 +102,13 @@ def parse_email_date(date_str: str) -> Optional[datetime]:
             return datetime.strptime(date_str, fmt)
         except (ValueError, TypeError):
             continue
+    
+    # Try with dateutil as fallback (more flexible)
+    try:
+        from dateutil import parser
+        return parser.parse(date_str)
+    except:
+        pass
     
     return None
 

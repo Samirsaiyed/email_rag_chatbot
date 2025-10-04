@@ -1,0 +1,74 @@
+[
+  {
+    "attachment_id": "A-77b76235",
+    "filename": "IT_Meeting_Minutes_Apr2001.pdf",
+    "file_type": "pdf",
+    "pages": [
+      {
+        "page_no": 1,
+        "text": "Page 1 IT Department Meeting Minutes Date: April 10, 2001 Attendees: John Doe, Sarah Johnson, Mike Chen Agenda: 1. Q2 Budget Review 2. Storage Upgrade Discussion 3. Network Maintenance Schedule Budget Discussion: Sarah from Finance reviewed the Q2 budget proposal. Initial proposal of 38,000 for storage was discussed. Finance suggested increasing to 45,000 to include backup system. Motion approved unanimously. Action Items: - John to finalize vendor contract - Sarah to process purchase order - Mike to schedule installation"
+      }
+    ],
+    "page_count": 1
+  },
+  {
+    "attachment_id": "A-86caf57b",
+    "filename": "Q2_Budget_Proposal.pdf",
+    "file_type": "pdf",
+    "pages": [
+      {
+        "page_no": 1,
+        "text": "Page 1 Q2 2001 Budget Proposal Department: IT Infrastructure Submitted by: John Doe Date: April 15, 2001 Summary: This document outlines the proposed budget for Q2 2001. Total requested amount: 45,000 Breakdown: - Storage vendor upgrade: 25,000 - Network equipment: 15,000 - Software licenses: 5,000"
+      },
+      {
+        "page_no": 2,
+        "text": "Page 2 Detailed Justification: Storage Vendor Upgrade (25,000): The current storage system is reaching capacity. We need to upgrade to ensure business continuity. Vendor: StorageTech Solutions Expected delivery: May 2001 Network Equipment (15,000): Replacement of aging switches in Building A. Will improve network reliability and speed. Software Licenses (5,000): Annual renewals for enterprise software."
+      }
+    ],
+    "page_count": 2
+  },
+  {
+    "attachment_id": "A-60a41f8d",
+    "filename": "Storage_Contract_Draft_v2.pdf",
+    "file_type": "pdf",
+    "pages": [
+      {
+        "page_no": 1,
+        "text": "Page 1 Storage Vendor Contract - DRAFT v2 Between: Enron Corporation And: StorageTech Solutions Date: April 1, 2001 This agreement outlines the terms for storage system upgrade. Proposed Amount: 38,000 Payment Terms: Net 30 Delivery Date: May 15, 2001 Equipment Specifications: - 10TB storage capacity - RAID 5 configuration - 247 support included"
+      }
+    ],
+    "page_count": 1
+  },
+  {
+    "attachment_id": "A-bb3bf530",
+    "filename": "Storage_Technical_Specs.pdf",
+    "file_type": "pdf",
+    "pages": [
+      {
+        "page_no": 1,
+        "text": "Page 1 Technical Specifications Document Product: Enterprise Storage Array Model X5000 Vendor: StorageTech Solutions Hardware Specifications: - Capacity: 10TB raw, 8TB usable (RAID 5) - Interface: Fibre Channel 2Gbps - Cache: 4GB battery-backed - Expansion: Up to 40TB Performance: - IOPS: 15,000 sustained - Throughput: 800 MBs - Latency:  5ms average"
+      },
+      {
+        "page_no": 2,
+        "text": "Page 2 Software Features: Management: - Web-based administration console - SNMP monitoring support - Email alerts for critical events Data Protection: - Snapshot capability - Replication support - Hot spare drives Support Package: - 247 phone support - 4-hour response time - Annual firmware updates - Quarterly health checks Installation includes: - On-site setup and configuration - Data migration assistance - Staff training (2 days)"
+      }
+    ],
+    "page_count": 2
+  },
+  {
+    "attachment_id": "A-7e92e4a5",
+    "filename": "Vendor_Comparison_Analysis.pdf",
+    "file_type": "pdf",
+    "pages": [
+      {
+        "page_no": 1,
+        "text": "Page 1 Storage Vendor Comparison Analysis Date: March 28, 2001 Prepared by: IT Department Vendors Evaluated: 1. StorageTech Solutions 2. DataSafe Inc. 3. EnterpriseStorage Corp. Evaluation Criteria: - Price - Performance - Support - Delivery timeline"
+      },
+      {
+        "page_no": 2,
+        "text": "Page 2 Detailed Comparison: StorageTech Solutions: Price: 38,000 Performance: Excellent Support: 247 Delivery: 6 weeks Rating: 910 DataSafe Inc: Price: 42,000 Performance: Good Support: Business hours only Delivery: 8 weeks Rating: 710 EnterpriseStorage Corp: Price: 35,000 Performance: Fair Support: Limited Delivery: 10 weeks Rating: 610 Recommendation: StorageTech Solutions offers the best value for our requirements."
+      }
+    ],
+    "page_count": 2
+  }
+]

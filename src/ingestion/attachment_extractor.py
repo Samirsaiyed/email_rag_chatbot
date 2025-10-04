@@ -1,7 +1,7 @@
 """
 Extract text from attachments (PDF, DOCX, TXT, HTML).
 """
-import fitz  # PyMuPDF
+import pymupdf as fitz
 import docx
 from pathlib import Path
 from typing import List, Dict, Optional

@@ -45,8 +45,9 @@ class ThreadBuilder:
         
         # Assign thread IDs and sort by date
         for subject, thread_emails in selected_threads.items():
-            # Sort emails by date
-            thread_emails.sort(key=lambda x: x.get('date', ''))
+            # Sort emails by date, handling None values
+            # Emails without dates go to the end
+            thread_emails.sort(key=lambda x: x.get('date') or '9999-99-99')
             
             # Generate thread ID
             thread_id = generate_id('T', subject)
@@ -57,14 +58,19 @@ class ThreadBuilder:
             
             self.threads[thread_id] = thread_emails
             
+            # Get actual date range (skip None dates)
+            dates_only = [e.get('date') for e in thread_emails if e.get('date')]
+            start_date = dates_only[0] if dates_only else None
+            end_date = dates_only[-1] if dates_only else None
+            
             # Create metadata
             self.thread_metadata.append({
                 'thread_id': thread_id,
                 'subject': thread_emails[0].get('subject', ''),
                 'subject_normalized': subject,
                 'message_count': len(thread_emails),
-                'start_date': thread_emails[0].get('date'),
-                'end_date': thread_emails[-1].get('date'),
+                'start_date': start_date,
+                'end_date': end_date,
                 'participants': self._get_participants(thread_emails)
             })
         

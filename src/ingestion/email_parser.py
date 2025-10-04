@@ -45,6 +45,26 @@ class EmailParser:
             logger.log_error("Failed to load CSV", e)
             raise
     
+    def _extract_headers(self, message: str) -> Dict[str, str]:
+        """Extract email headers from message text."""
+        headers = {}
+        
+        # Common header patterns (case-insensitive, flexible whitespace)
+        header_patterns = {
+            'from': r'From:\s*(.+?)(?:\n(?!\s)|$)',
+            'to': r'To:\s*(.+?)(?:\n(?!\s)|$)',
+            'cc': r'Cc:\s*(.+?)(?:\n(?!\s)|$)',
+            'subject': r'Subject:\s*(.+?)(?:\n(?!\s)|$)',
+            'date': r'Date:\s*(.+?)(?:\n(?!\s)|$)',
+        }
+        
+        for key, pattern in header_patterns.items():
+            match = re.search(pattern, message, re.IGNORECASE | re.MULTILINE)
+            if match:
+                headers[key] = match.group(1).strip()
+        
+        return headers
+
     def parse_email(self, row: pd.Series) -> Optional[Dict]:
         """
         Parse a single email row into structured format.
@@ -69,16 +89,46 @@ class EmailParser:
             # Generate message ID
             message_id = generate_id('M', message_text)
             
-            # Parse date
-            date_obj = parse_email_date(headers.get('date', ''))
+            # Try multiple ways to get date
+            date_obj = None
             
-            # Apply date filter
+            # Method 1: From headers
+            if headers.get('date'):
+                date_obj = parse_email_date(headers['date'])
+            
+            # Method 2: Check if there's a separate 'date' column in CSV
+            if not date_obj and 'date' in row:
+                date_obj = parse_email_date(str(row['date']))
+            
+            # Method 3: Try to extract from file path if it contains date info
+            if not date_obj and 'file' in row:
+                # Some Enron files have dates in path like "maildir/allen-p/sent/2001-05-14.txt"
+                file_path = str(row.get('file', ''))
+                date_match = re.search(r'(\d{4})-(\d{2})-(\d{2})', file_path)
+                if date_match:
+                    try:
+                        # REMOVE: from datetime import datetime
+                        # datetime is already imported at top
+                        date_obj = datetime(
+                            int(date_match.group(1)),
+                            int(date_match.group(2)),
+                            int(date_match.group(3))
+                        )
+                    except:
+                        pass
+
+            # Apply date filter only if we have a valid date AND filter is configured
             if date_obj and INGESTION_CONFIG.date_range_start:
+                # Remove timezone info to make comparison work
+                if date_obj.tzinfo is not None:
+                    date_obj = date_obj.replace(tzinfo=None)
+                
                 start_date = datetime.fromisoformat(INGESTION_CONFIG.date_range_start)
                 end_date = datetime.fromisoformat(INGESTION_CONFIG.date_range_end)
                 
                 if not (start_date <= date_obj <= end_date):
                     return None
+
             
             # Extract sender and recipients
             from_email = extract_email_address(headers.get('from', ''))
@@ -100,17 +150,17 @@ class EmailParser:
                 return None
             
             parsed_email = {
-                'message_id': message_id,
-                'date': date_obj.isoformat() if date_obj else None,
-                'from': from_email,
-                'from_name': from_name,
-                'to': to_emails,
-                'cc': cc_emails,
-                'subject': headers.get('subject', '').strip(),
-                'subject_normalized': normalize_subject(headers.get('subject', '')),
-                'body': body,
-                'raw_message': message_text
-            }
+            'message_id': message_id,
+            'date': date_obj.replace(tzinfo=None).isoformat() if date_obj else None,  # Strip timezone
+            'from': from_email,
+            'from_name': from_name,
+            'to': to_emails,
+            'cc': cc_emails,
+            'subject': headers.get('subject', '').strip(),
+            'subject_normalized': normalize_subject(headers.get('subject', '')),
+            'body': body,
+            'raw_message': message_text
+        }
             
             return parsed_email
             
