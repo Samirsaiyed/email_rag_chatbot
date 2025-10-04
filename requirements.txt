@@ -1,0 +1,46 @@
+# Core dependencies
+pandas>=2.0.0
+numpy>=1.24.0
+
+# Email parsing
+python-email>=0.0.1
+email-validator>=2.0.0
+
+# PDF/Document processing
+PyMuPDF>=1.23.0
+python-docx>=0.8.11
+pdfplumber>=0.10.0
+
+# Text processing
+beautifulsoup4>=4.12.0
+nltk>=3.8.0
+
+# LangChain ecosystem
+langchain>=0.1.0
+langchain-community>=0.0.10
+langgraph>=0.0.20
+
+# Embeddings and retrieval
+sentence-transformers>=2.2.2
+faiss-cpu>=1.7.4
+rank-bm25>=0.2.2
+
+# HuggingFace
+transformers>=4.35.0
+torch>=2.0.0
+
+# API
+fastapi>=0.104.0
+uvicorn>=0.24.0
+pydantic>=2.0.0
+
+# UI
+gradio>=4.0.0
+
+# Utils
+python-dotenv>=1.0.0
+tqdm>=4.66.0
+
+# Other
+docx
+fitz
