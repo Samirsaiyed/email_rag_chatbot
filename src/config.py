@@ -72,7 +72,17 @@ class IngestionConfig:
     remove_forwarding_headers: bool = True
     remove_signatures: bool = True
 
+@dataclass
+class LLMConfig:
+    """LLM configuration for OpenAI."""
+    model_name: str = "gpt-3.5-turbo"  # Cheap and fast
+    max_tokens: int = 256
+    temperature: float = 0.3
+    api_key: str = os.getenv("OPENAI_API_KEY", "")
+
+
 # Global config instances
 MODEL_CONFIG = ModelConfig()
 RETRIEVAL_CONFIG = RetrievalConfig()
 INGESTION_CONFIG = IngestionConfig()
+LLM_CONFIG = LLMConfig()
