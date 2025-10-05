@@ -275,6 +275,7 @@ email-rag-chatbot/
 ## Demo
 
 See `demo_video.mp4` for a walkthrough demonstrating:
+[Watch Demo Video](./Demo_video/demo_video.mp4)
 - Thread selection and session start  
 - Q&A with citations  
 - Pronoun resolution ("Who approved it?")  
