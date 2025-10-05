@@ -33,8 +33,6 @@ The Email RAG Chatbot is a retrieval-augmented generation system that combines h
 ▼            ▼             ▼                ▼
 Entities    LangGraph    BM25+FAISS      OpenAI/Ollama
 
-Conv      Workflow     Indexes         + Citations
-
 ## Component Details
 
 ### 1. Data Ingestion Pipeline
