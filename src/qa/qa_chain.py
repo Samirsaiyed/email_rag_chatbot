@@ -1,32 +1,43 @@
 """
-QA chain using OpenAI with inline citations.
+QA chain - supports both Ollama and OpenAI with inline citations.
 """
 from typing import List, Tuple, Dict
 from langchain.schema import Document
+from langchain_community.llms import Ollama
 from langchain_openai import ChatOpenAI
-from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.prompts import PromptTemplate, ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from .prompts import QA_SYSTEM_PROMPT
 from src.config import LLM_CONFIG
 import re
-from dotenv import load_dotenv
-
-load_dotenv()
 
 
 class QAChain:
-    """Question answering chain with OpenAI and inline citations."""
+    """Question answering chain with LLM support."""
     
     def __init__(self):
-        """Initialize QA chain."""
-        self.llm = ChatOpenAI(
-            model=LLM_CONFIG.model_name,
-            temperature=LLM_CONFIG.temperature,
-            max_tokens=LLM_CONFIG.max_tokens,
-            api_key=LLM_CONFIG.api_key
-        )
+        """Initialize QA chain with LLM (Ollama or OpenAI)."""
         
-        self.prompt = ChatPromptTemplate.from_template(QA_SYSTEM_PROMPT)
+        if LLM_CONFIG.use_ollama:
+            # Use Ollama (open-source, local)
+            self.llm = Ollama(
+                model=LLM_CONFIG.ollama_model,
+                base_url=LLM_CONFIG.ollama_base_url,
+                temperature=LLM_CONFIG.temperature,
+            )
+            # Use PromptTemplate for Ollama
+            self.prompt = PromptTemplate.from_template(QA_SYSTEM_PROMPT)
+        else:
+            # Use OpenAI
+            self.llm = ChatOpenAI(
+                model=LLM_CONFIG.model_name,
+                temperature=LLM_CONFIG.temperature,
+                max_tokens=LLM_CONFIG.max_tokens,
+                api_key=LLM_CONFIG.api_key
+            )
+            # Use ChatPromptTemplate for OpenAI
+            self.prompt = ChatPromptTemplate.from_template(QA_SYSTEM_PROMPT)
+        
         self.chain = self.prompt | self.llm | StrOutputParser()
     
     def answer(
@@ -62,7 +73,7 @@ class QAChain:
         context = "\n".join(context_parts)
         
         try:
-            # Generate answer with citations already embedded
+            # Generate answer with citations
             raw_answer = self.chain.invoke({
                 "context": context,
                 "question": question
@@ -70,7 +81,7 @@ class QAChain:
             
             raw_answer = raw_answer.strip()
             
-            # Extract citations that the LLM added
+            # Extract citations
             citations = self._extract_citations(raw_answer, retrieved_docs)
             
             return {
@@ -88,7 +99,7 @@ class QAChain:
             }
         
         except Exception as e:
-            print(f"OpenAI Error: {e}")
+            print(f"LLM Error: {e}")
             return {
                 'answer': f"Error generating answer: {str(e)}",
                 'citations': [],

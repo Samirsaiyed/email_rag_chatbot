@@ -1,36 +1,36 @@
 """
-LLM-powered nodes for query rewriting.
+LLM-powered nodes for query rewriting - supports both Ollama and OpenAI.
 """
 from typing import Dict
+from langchain_community.llms import Ollama
 from langchain_openai import ChatOpenAI
-from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.prompts import PromptTemplate, ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from .state import QueryRewriteState
 from src.config import LLM_CONFIG
 import re
-from dotenv import load_dotenv
-
-load_dotenv()
 
 
 class QueryRewriteNodes:
     """Nodes for query rewriting workflow using LLM."""
     
     def __init__(self):
-        """Initialize with LLM."""
-        self.llm = ChatOpenAI(
-            model="gpt-3.5-turbo",  # Fast and cheap for rewriting
-            temperature=0.1,  # Low temp for consistent rewrites
-            max_tokens=100,
-            api_key=LLM_CONFIG.api_key
-        )
+        """Initialize with LLM (Ollama or OpenAI based on config)."""
         
-        self.rewrite_prompt = ChatPromptTemplate.from_template("""You are a query rewriting assistant. Your job is to rewrite vague or context-dependent queries into clear, standalone queries.
+        if LLM_CONFIG.use_ollama:
+            # Use Ollama (open-source, local)
+            self.llm = Ollama(
+                model=LLM_CONFIG.ollama_model,
+                base_url=LLM_CONFIG.ollama_base_url,
+                temperature=LLM_CONFIG.temperature,
+            )
+            # Use PromptTemplate for Ollama
+            self.rewrite_prompt = PromptTemplate.from_template("""You are a query rewriting assistant. Rewrite vague queries into clear, standalone queries.
 
 CONVERSATION HISTORY:
 {conversation_history}
 
-ENTITIES MENTIONED:
+ENTITIES:
 - People: {people}
 - Files: {files}
 - Amounts: {amounts}
@@ -39,11 +39,41 @@ ENTITIES MENTIONED:
 ORIGINAL QUERY: {original_query}
 
 INSTRUCTIONS:
-1. If the query uses pronouns (it, that, he, she, they), replace them with the actual entities
-2. If the query refers to previous context, make it explicit
-3. If the query is already clear, return it unchanged
-4. Keep the rewritten query concise and natural
-5. Do NOT add extra information not implied by the context
+1. Replace pronouns (it, that, he, she) with actual entities
+2. Make references explicit
+3. If already clear, return unchanged
+4. Keep it concise
+5. Do NOT add extra information
+
+REWRITTEN QUERY:""")
+        else:
+            # Use OpenAI
+            self.llm = ChatOpenAI(
+                model=LLM_CONFIG.model_name,
+                temperature=LLM_CONFIG.temperature,
+                max_tokens=100,
+                api_key=LLM_CONFIG.api_key
+            )
+            # Use ChatPromptTemplate for OpenAI
+            self.rewrite_prompt = ChatPromptTemplate.from_template("""You are a query rewriting assistant. Rewrite vague queries into clear, standalone queries.
+
+CONVERSATION HISTORY:
+{conversation_history}
+
+ENTITIES:
+- People: {people}
+- Files: {files}
+- Amounts: {amounts}
+- Dates: {dates}
+
+ORIGINAL QUERY: {original_query}
+
+INSTRUCTIONS:
+1. Replace pronouns (it, that, he, she) with actual entities
+2. Make references explicit
+3. If already clear, return unchanged
+4. Keep it concise
+5. Do NOT add extra information
 
 REWRITTEN QUERY:""")
         
@@ -95,7 +125,6 @@ REWRITTEN QUERY:""")
         try:
             # Prepare context
             entities = state.get('entities', {})
-            last_mentioned = state.get('last_mentioned', {})
             
             # Get conversation snippet (last 2 turns)
             conv_history = state.get('conversation_history', '')
@@ -125,7 +154,7 @@ REWRITTEN QUERY:""")
             if rewritten.lower() == state['original_query'].lower():
                 reasoning = 'LLM determined no rewrite needed'
             else:
-                reasoning = f'Resolved references using conversation context'
+                reasoning = 'Resolved references using conversation context'
             
             return {
                 **state,

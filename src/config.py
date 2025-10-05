@@ -5,6 +5,10 @@ import os
 from pathlib import Path
 from dataclasses import dataclass
 from typing import Optional
+from dotenv import load_dotenv
+
+load_dotenv()
+
 
 # Paths
 PROJECT_ROOT = Path(__file__).parent.parent
@@ -74,11 +78,22 @@ class IngestionConfig:
 
 @dataclass
 class LLMConfig:
-    """LLM configuration for OpenAI."""
-    model_name: str = "gpt-3.5-turbo"  # Cheap and fast
-    max_tokens: int = 256
-    temperature: float = 0.3
+    """LLM configuration - supports both Ollama and OpenAI."""
+    
+    # LLM Provider Selection
+    use_ollama: bool = False  # Set to True to use Ollama, False for OpenAI
+    
+    # Ollama settings (open-source, local, free)
+    ollama_model: str = "llama3.2:3b"  # Options: gemma3:1b, phi3:mini, llama3.2:3b
+    ollama_base_url: str = "http://localhost:11434"
+    
+    # OpenAI settings
+    model_name: str = "gpt-3.5-turbo"
     api_key: str = os.getenv("OPENAI_API_KEY", "")
+    
+    # Common settings
+    max_tokens: int = 500
+    temperature: float = 0.1
 
 
 # Global config instances
