@@ -5,7 +5,7 @@ import logging
 import json
 from pathlib import Path
 from datetime import datetime
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 
 class TraceLogger:
     """Logger with JSONL trace output."""
@@ -30,12 +30,14 @@ class TraceLogger:
     
     def _setup_trace_file(self):
         """Setup JSONL trace file in runs directory."""
-        runs_dir = Path("runs")
+        from src.config import RUNS_DIR
+        
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        session_dir = runs_dir / f"{timestamp}_{self.session_id}"
+        session_dir = RUNS_DIR / f"{timestamp}_{self.session_id}"
         session_dir.mkdir(parents=True, exist_ok=True)
         
         self.trace_file = session_dir / "trace.jsonl"
+        self.log_info(f"Trace logging to: {self.trace_file}")
     
     def log_trace(self, event_type: str, data: Dict[str, Any]):
         """
@@ -66,3 +68,7 @@ class TraceLogger:
             self.logger.error(f"{message}: {str(error)}")
         else:
             self.logger.error(message)
+    
+    def log_warning(self, message: str):
+        """Log warning message."""
+        self.logger.warning(message)
