@@ -1,5 +1,5 @@
 """
-LangGraph workflow for query rewriting.
+LangGraph workflow for LLM-based query rewriting.
 """
 from typing import Dict
 from langgraph.graph import StateGraph, END
@@ -8,7 +8,7 @@ from .nodes import QueryRewriteNodes
 
 
 class QueryRewriter:
-    """LangGraph-based query rewriter."""
+    """LLM-powered query rewriter."""
     
     def __init__(self):
         """Initialize query rewriter."""
@@ -16,13 +16,7 @@ class QueryRewriter:
         self.graph = self._build_graph()
     
     def _build_graph(self) -> StateGraph:
-        """
-        Build the query rewriting workflow graph.
-        
-        Returns:
-            Compiled StateGraph
-        """
-        # Create graph
+        """Build the query rewriting workflow graph."""
         workflow = StateGraph(QueryRewriteState)
         
         # Add nodes
@@ -51,12 +45,11 @@ class QueryRewriter:
         workflow.add_edge("rewrite", END)
         workflow.add_edge("skip", END)
         
-        # Compile
         return workflow.compile()
     
     def rewrite(self, query: str, memory_context: Dict) -> Dict[str, str]:
         """
-        Rewrite query using memory context.
+        Rewrite query using LLM and memory context.
         
         Args:
             query: Original query
@@ -65,7 +58,6 @@ class QueryRewriter:
         Returns:
             Dictionary with rewritten_query and reasoning
         """
-        # Prepare initial state
         initial_state = {
             'original_query': query,
             'conversation_history': memory_context.get('conversation_history', ''),
@@ -78,7 +70,6 @@ class QueryRewriter:
             'rewrite_reasoning': ''
         }
         
-        # Run graph
         result = self.graph.invoke(initial_state)
         
         return {
