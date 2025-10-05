@@ -5,33 +5,19 @@
 The Email RAG Chatbot is a retrieval-augmented generation system that combines hybrid search, conversational memory, and LLM-based query rewriting to answer questions about email threads with grounded citations.
 
 ## Architecture Diagram
-┌─────────────────────────────────────────────────────────────────┐
-│                          User Interface                          │
-│                      (Gradio Web App)                            │
-└────────────────────────────┬────────────────────────────────────┘
-│
-▼
-┌─────────────────────────────────────────────────────────────────┐
-│                         FastAPI Layer                            │
-│  Routes: /start_session, /ask, /reset_session                   │
-└────────────────────────────┬────────────────────────────────────┘
-│
-▼
-┌─────────────────────────────────────────────────────────────────┐
-│                      ThreadSession Manager                        │
-│  - Orchestrates all components                                   │
-│  - Manages conversation flow                                     │
-└──┬──────────────┬──────────────┬──────────────┬─────────────────┘
-│              │              │              │
-▼              ▼              ▼              ▼
-┌─────────┐  ┌─────────┐  ┌──────────┐  ┌──────────────┐
-│ Memory  │  │  Query  │  │Retrieval │  │  QA Chain    │
-│ Manager │  │Rewriter │  │ (Hybrid) │  │ (LLM + Cite) │
-└─────────┘  └─────────┘  └──────────┘  └──────────────┘
-│            │             │                │
-│            │             │                │
-▼            ▼             ▼                ▼
-Entities    LangGraph    BM25+FAISS      OpenAI/Ollama
+```mermaid
+graph TD
+    A[User Interface - Gradio] --> B[FastAPI Layer]
+    B --> C[ThreadSession Manager]
+    C --> D[Memory Manager]
+    C --> E[Query Rewriter]
+    C --> F[Hybrid Retriever]
+    C --> G[QA Chain]
+    E --> H[LangGraph Workflow]
+    F --> I[BM25 Retriever]
+    F --> J[Vector Retriever - FAISS]
+    G --> K[OpenAI/Ollama LLM]
+    G --> L[Citation Engine]
 
 ## Component Details
 
