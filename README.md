@@ -195,12 +195,17 @@ python scripts/test_query_rewriter.py
 
 ## Docker Deployment
 
-```bash
-docker-compose up
-```
+Docker configuration is provided in `Dockerfile` and `docker-compose.yml`.
 
-- UI available at: http://localhost:7860  
-- API available at: http://localhost:8000
+**Note:** Docker setup is included but not fully tested with Ollama. Recommended approach:
+
+**Direct execution (tested):**
+```bash
+# Terminal 1
+python scripts/run_api.py
+
+# Terminal 2  
+python ui/app.py
 
 ---
 

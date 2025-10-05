@@ -6,33 +6,34 @@ The Email RAG Chatbot is a retrieval-augmented generation system that combines h
 
 ## Architecture Diagram
 ┌─────────────────────────────────────────────────────────────────┐
-│                          User Interface                         │
-│                      (Gradio Web App)                           │
+│                          User Interface                          │
+│                      (Gradio Web App)                            │
 └────────────────────────────┬────────────────────────────────────┘
-                             │
-                             ▼
+│
+▼
 ┌─────────────────────────────────────────────────────────────────┐
-│                         FastAPI Layer                           │
+│                         FastAPI Layer                            │
 │  Routes: /start_session, /ask, /reset_session                   │
 └────────────────────────────┬────────────────────────────────────┘
-                             │
-                             ▼
+│
+▼
 ┌─────────────────────────────────────────────────────────────────┐
-│                      ThreadSession Manager                      │
-│  - Orchestrates all components                                  │
-│  - Manages conversation flow                                    │
+│                      ThreadSession Manager                        │
+│  - Orchestrates all components                                   │
+│  - Manages conversation flow                                     │
 └──┬──────────────┬──────────────┬──────────────┬─────────────────┘
-   │              │              │              │
-   ▼              ▼              ▼              ▼
+│              │              │              │
+▼              ▼              ▼              ▼
 ┌─────────┐  ┌─────────┐  ┌──────────┐  ┌──────────────┐
 │ Memory  │  │  Query  │  │Retrieval │  │  QA Chain    │
 │ Manager │  │Rewriter │  │ (Hybrid) │  │ (LLM + Cite) │
 └─────────┘  └─────────┘  └──────────┘  └──────────────┘
-   │            │             │                │
-   │            │             │                │
-   ▼            ▼             ▼                ▼
+│            │             │                │
+│            │             │                │
+▼            ▼             ▼                ▼
 Entities    LangGraph    BM25+FAISS      OpenAI/Ollama
- Conv        Workflow     Indexes         + Citations
+
+Conv      Workflow     Indexes         + Citations
 
 ## Component Details
 
