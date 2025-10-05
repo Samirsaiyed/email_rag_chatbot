@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  api:
+    build: .
+    container_name: email-rag-api
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/app/data
+      - ./runs:/app/runs
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+    command: python scripts/run_api.py
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - rag-network
+
+  ui:
+    build: .
+    container_name: email-rag-ui
+    ports:
+      - "7860:7860"
+    depends_on:
+      - api
+    environment:
+      - API_URL=http://api:8000
+    command: python ui/app.py
+    networks:
+      - rag-network
+
+networks:
+  rag-network:
+    driver: bridge
+
+volumes:
+  data:
+  runs:
