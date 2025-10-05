@@ -1,20 +1,105 @@
 [
   {
-    "attachment_id": "A-77b76235",
+    "attachment_id": "A-76f40009",
+    "filename": "Axia_Credit_Analysis.pdf",
+    "file_type": "pdf",
+    "page_count": 2,
+    "pages": [
+      {
+        "page_no": 1,
+        "text": "Page 1 Credit Analysis Report Subject: Axia Energy, LP Date: February 8, 2001 Analyst: Risk Management Team Credit Rating: BBB Credit Limit Recommendation: 5,000,000 Financial Highlights: - Annual Revenue: 180M - Assets: 95M - Debt-to-Equity: 1.2 - Current Ratio: 1.8 Risk Factors: - Concentration in Texas market - Limited hedging program - Seasonal demand variability Recommendation: Approve with standard credit monitoring"
+      },
+      {
+        "page_no": 2,
+        "text": "Page 2 Page 2 Historical Performance: - Payment history: Excellent (no late payments) - Years in business: 8 - Management experience: Strong Collateral: - Gas storage facilities: 12M - Pipeline capacity rights: 8M Monitoring Requirements: - Quarterly financial statements - Monthly usage reports - Annual credit review"
+      }
+    ]
+  },
+  {
+    "attachment_id": "A-032844fa",
+    "filename": "Axia_Energy_Partnership_Agreement.pdf",
+    "file_type": "pdf",
+    "page_count": 1,
+    "pages": [
+      {
+        "page_no": 1,
+        "text": "Page 1 Axia Energy Partnership Agreement Date: February 15, 2001 Parties: - Enron Corporation - Axia Energy, LP Terms: 1. Natural Gas Supply: 50,000 MMBtuday 2. Contract Duration: 36 months 3. Pricing: NYMEX  0.15MMBtu 4. Delivery Point: Houston Ship Channel Financial Terms: - Monthly payment: Estimated 2.5M - Security deposit: 500,000 - Payment terms: Net 30 days Approved by: Legal Department Signed: February 20, 2001"
+      }
+    ]
+  },
+  {
+    "attachment_id": "A-dfa482ec",
+    "filename": "El_Paso_Load_Forecast.pdf",
+    "file_type": "pdf",
+    "page_count": 2,
+    "pages": [
+      {
+        "page_no": 1,
+        "text": "Page 1 Load Forecast Analysis Customer: El Paso Electric Company Period: Summer 2001 Date: March 5, 2001 Peak Demand Forecast: - June: 1,250 MW - July: 1,450 MW - August: 1,480 MW - September: 1,320 MW Weather Assumptions: - Average temperatures 2F above normal - 15 probability of extreme heat event Load Growth: - Year-over-year: 3.5 - New commercial: 25 MW - Residential growth: 15 MW"
+      },
+      {
+        "page_no": 2,
+        "text": "Page 2 Page 2 Reserve Margin Analysis: - Current capacity: 1,650 MW - Required reserves: 15 - Shortfall risk: Low Renewable Integration: - Solar: 45 MW (planned) - Wind: 30 MW (existing) Recommendations: - Secure additional 100 MW for peak season - Consider interruptible contracts - Monitor weather forecasts closely"
+      }
+    ]
+  },
+  {
+    "attachment_id": "A-f860a5b6",
+    "filename": "El_Paso_Power_Purchase_Agreement.pdf",
+    "file_type": "pdf",
+    "page_count": 1,
+    "pages": [
+      {
+        "page_no": 1,
+        "text": "Page 1 Power Purchase Agreement Seller: Enron Power Marketing Buyer: El Paso Electric Company Date: March 20, 2001 Power Delivery Terms: - Capacity: 150 MW - Delivery Period: June 2001 - May 2002 - Delivery Point: Palo Verde hub Pricing: - Base Rate: 45MWh - Peak Hours (6am-10pm): 55MWh - Off-Peak: 35MWh Total Contract Value: Approximately 48M annually Transmission: - Buyer responsible for transmission costs - Seller arranges scheduling Force Majeure: Standard clauses apply Termination: 90 days notice required"
+      }
+    ]
+  },
+  {
+    "attachment_id": "A-e1138512",
     "filename": "IT_Meeting_Minutes_Apr2001.pdf",
     "file_type": "pdf",
+    "page_count": 1,
     "pages": [
       {
         "page_no": 1,
         "text": "Page 1 IT Department Meeting Minutes Date: April 10, 2001 Attendees: John Doe, Sarah Johnson, Mike Chen Agenda: 1. Q2 Budget Review 2. Storage Upgrade Discussion 3. Network Maintenance Schedule Budget Discussion: Sarah from Finance reviewed the Q2 budget proposal. Initial proposal of 38,000 for storage was discussed. Finance suggested increasing to 45,000 to include backup system. Motion approved unanimously. Action Items: - John to finalize vendor contract - Sarah to process purchase order - Mike to schedule installation"
       }
-    ],
-    "page_count": 1
+    ]
   },
   {
-    "attachment_id": "A-86caf57b",
+    "attachment_id": "A-d5f45043",
+    "filename": "PGE_California_Crisis_Memo.pdf",
+    "file_type": "pdf",
+    "page_count": 1,
+    "pages": [
+      {
+        "page_no": 1,
+        "text": "Page 1 Internal Memo - California Energy Crisis To: Trading Desk From: West Power Desk Date: January 25, 2001 RE: PGE Exposure and Market Conditions URGENT: PGE Credit Situation Current Exposure: - Outstanding receivables: 185M - Mark-to-market exposure: 67M - Total at-risk: 252M Credit Actions Taken: - Reduced credit line from 500M to 100M - Required daily collateral posting - Halted new forward transactions California Market Conditions: - Spot prices: 200-400MWh (normal: 30-50) - Reserve margin: Critical (5) - Rolling blackouts: Stage 2 alerts frequent"
+      }
+    ]
+  },
+  {
+    "attachment_id": "A-799ce120",
+    "filename": "PGE_Risk_Mitigation_Strategy.pdf",
+    "file_type": "pdf",
+    "page_count": 2,
+    "pages": [
+      {
+        "page_no": 1,
+        "text": "Page 1 Risk Mitigation Strategy Subject: PGE Bankruptcy Risk Date: January 30, 2001 Immediate Actions: 1. Cease new physical delivery contracts 2. Liquidate forward positions where possible 3. Increase collateral requirements to 120 4. Daily exposure reporting to senior management Scenario Analysis: - Best case: State bailout, exposure recovered - Base case: Partial recovery 60-70 - Worst case: Chapter 11, recovery 30-40 Hedging Recommendations: - Purchase credit default protection - Diversify California counterparties - Reduce overall CA market exposure by 40"
+      },
+      {
+        "page_no": 2,
+        "text": "Page 2 Page 2 Legal Considerations: - Netting agreements: Review enforceability - Preference period: 90 days pre-filing - Setoff rights: Confirm jurisdiction Financial Impact: - Potential loss: 75M - 175M - Impact on Q1 earnings: Significant - Reserve requirements: 100M recommended Next Steps: - Daily credit committee briefings - Coordinate with legal team - Prepare disclosure for SEC filing"
+      }
+    ]
+  },
+  {
+    "attachment_id": "A-95533b47",
     "filename": "Q2_Budget_Proposal.pdf",
     "file_type": "pdf",
+    "page_count": 2,
     "pages": [
       {
         "page_no": 1,
@@ -24,25 +109,25 @@
         "page_no": 2,
         "text": "Page 2 Detailed Justification: Storage Vendor Upgrade (25,000): The current storage system is reaching capacity. We need to upgrade to ensure business continuity. Vendor: StorageTech Solutions Expected delivery: May 2001 Network Equipment (15,000): Replacement of aging switches in Building A. Will improve network reliability and speed. Software Licenses (5,000): Annual renewals for enterprise software."
       }
-    ],
-    "page_count": 2
+    ]
   },
   {
-    "attachment_id": "A-60a41f8d",
+    "attachment_id": "A-77c88f8d",
     "filename": "Storage_Contract_Draft_v2.pdf",
     "file_type": "pdf",
+    "page_count": 1,
     "pages": [
       {
         "page_no": 1,
         "text": "Page 1 Storage Vendor Contract - DRAFT v2 Between: Enron Corporation And: StorageTech Solutions Date: April 1, 2001 This agreement outlines the terms for storage system upgrade. Proposed Amount: 38,000 Payment Terms: Net 30 Delivery Date: May 15, 2001 Equipment Specifications: - 10TB storage capacity - RAID 5 configuration - 247 support included"
       }
-    ],
-    "page_count": 1
+    ]
   },
   {
-    "attachment_id": "A-bb3bf530",
+    "attachment_id": "A-505beccc",
     "filename": "Storage_Technical_Specs.pdf",
     "file_type": "pdf",
+    "page_count": 2,
     "pages": [
       {
         "page_no": 1,
@@ -52,13 +137,13 @@
         "page_no": 2,
         "text": "Page 2 Software Features: Management: - Web-based administration console - SNMP monitoring support - Email alerts for critical events Data Protection: - Snapshot capability - Replication support - Hot spare drives Support Package: - 247 phone support - 4-hour response time - Annual firmware updates - Quarterly health checks Installation includes: - On-site setup and configuration - Data migration assistance - Staff training (2 days)"
       }
-    ],
-    "page_count": 2
+    ]
   },
   {
-    "attachment_id": "A-7e92e4a5",
+    "attachment_id": "A-0ac60a67",
     "filename": "Vendor_Comparison_Analysis.pdf",
     "file_type": "pdf",
+    "page_count": 2,
     "pages": [
       {
         "page_no": 1,
@@ -68,7 +153,66 @@
         "page_no": 2,
         "text": "Page 2 Detailed Comparison: StorageTech Solutions: Price: 38,000 Performance: Excellent Support: 247 Delivery: 6 weeks Rating: 910 DataSafe Inc: Price: 42,000 Performance: Good Support: Business hours only Delivery: 8 weeks Rating: 710 EnterpriseStorage Corp: Price: 35,000 Performance: Fair Support: Limited Delivery: 10 weeks Rating: 610 Recommendation: StorageTech Solutions offers the best value for our requirements."
       }
-    ],
-    "page_count": 2
+    ]
+  },
+  {
+    "attachment_id": "A-a8eb0489",
+    "filename": "Axia_Negotiation_Notes.docx",
+    "file_type": "docx",
+    "page_count": 1,
+    "pages": [
+      {
+        "page_no": 1,
+        "text": "Axia Energy - Negotiation Summary Negotiation Summary: Axia Energy Partnership Date: February 12, 2001 Lead Negotiator: Commercial Trading Desk Overview: Successful negotiation with Axia Energy for long-term natural gas supply agreement. Final terms represent a win-win arrangement that secures reliable supply while maintaining acceptable pricing. Key Negotiation Points: Volume Commitment: Initial request was 75,000 MMBtuday. Settled at 50,000 MMBtuday with option to increase to 65,000 after 12 months based on performance. Pricing Structure: Axia wanted fixed pricing. We pushed for index-based pricing. Final agreement: NYMEX  0.15MMBtu basis differential, which is favorable given current market conditions. Contract Duration: Compromised on 36 months (their ask: 60 months, our initial offer: 24 months). This provides adequate stability while maintaining flexibility. Credit Terms: Agreed to 500,000 security deposit (down from their initial ask of 1M). Credit limit approved at 5M based on risk analysis. Delivery Points: Secured Houston Ship Channel as primary delivery point, which aligns with our distribution infrastructure. Next Steps: - Legal review: February 13-14 - Executive approval: February 15 - Contract execution: February 20 - First delivery: March 1"
+      }
+    ]
+  },
+  {
+    "attachment_id": "A-9d925e41",
+    "filename": "PGE_Crisis_Timeline.docx",
+    "file_type": "docx",
+    "page_count": 1,
+    "pages": [
+      {
+        "page_no": 1,
+        "text": "PGE Crisis - Key Events Timeline California Energy Crisis: PGE Timeline Compiled: February 5, 2001 December 2000: - Dec 7: First rolling blackouts in California - Dec 14: California ISO declares Stage 3 emergency - Dec 15: PGE announces severe financial stress January 2001: - Jan 2: Spot prices exceed 300MWh - Jan 10: PGE credit rating downgraded to junk - Jan 16: Governor declares state of emergency - Jan 17: State begins buying power for utilities - Jan 25: Our credit committee reduces PGE exposure limit Key Issues: Wholesale Prices: Market prices have increased 10x from 2000 levels due to supply constraints, transmission bottlenecks, and strong demand. Retail Rate Freeze: AB 1890 prevents utilities from passing costs to consumers, creating massive losses for PGE and SCE. Credit Exposure: Our receivables have grown to 185M. Bankruptcy risk is material and increasing daily. State Intervention: State purchasing power on behalf of utilities. Long-term solution unclear. Political pressure for rate increases vs. public backlash. Our Strategy: 1. Minimize new California exposure 2. Collect receivables aggressively 3. Prepare for potential bankruptcy filing 4. Monitor legislative developments Outlook: Situation remains fluid. Bankruptcy filing by PGE within 60-90 days is probable unless state provides financial support."
+      }
+    ]
+  },
+  {
+    "attachment_id": "A-a5b0b17f",
+    "filename": "Storage_Upgrade_Notes.docx",
+    "file_type": "docx",
+    "page_count": 1,
+    "pages": [
+      {
+        "page_no": 1,
+        "text": "Storage Upgrade - Internal Notes Meeting Notes: Storage Vendor Selection Date: April 5, 2001 Attendees: John Doe, Sarah Johnson, Mike Chen Key Discussion Points: We reviewed three vendor proposals for the storage upgrade project. The consensus is leaning toward StorageTech Solutions based on their superior technical specifications and competitive pricing. Budget Considerations: The initial budget request was 38,000, but after reviewing the technical requirements, we've increased the recommendation to 45,000. This includes installation, migration services, and extended warranty. Timeline: - Vendor selection: April 15 - Contract signing: April 30 - Installation: May 15-30 - Migration: June 1-15 - Go-live: June 20 Action Items: - John: Finalize contract negotiations - Sarah: Process purchase requisition - Mike: Prepare migration plan Next Steps: Need executive approval for the 45,000 budget. Once approved, we can proceed with contract execution."
+      }
+    ]
+  },
+  {
+    "attachment_id": "A-baef29f1",
+    "filename": "Axia_Email_Forward.txt",
+    "file_type": "txt",
+    "page_count": 1,
+    "pages": [
+      {
+        "page_no": 1,
+        "text": "From: Trading Desk To: Risk Management Date: February 1, 2001 Subject: FW: Axia Energy - Initial Proposal ---------- Forwarded message ---------- From: Axia Energy contact@axiaenergy.com Date: January 29, 2001 Subject: Partnership Proposal Dear Enron Team, Axia Energy LP is interested in establishing a long-term natural gas supply partnership with Enron. We are a growing energy company based in Houston with proven reserves and strong operational capabilities. Key highlights of our proposal: - Supply volume: Up to 75,000 MMBtuday - Duration: 5-year agreement preferred - Delivery: Houston Ship Channel area - Pricing: Competitive fixed rates or index-based (open to discussion) We believe a partnership would be mutually beneficial given: 1. Our reliable supply capabilities 2. Enron's distribution network 3. Aligned geographic focus in Texas market Would appreciate the opportunity to discuss this proposal in detail. Available for meeting next week. Best regards, David Martinez VP Business Development Axia Energy, LP"
+      }
+    ]
+  },
+  {
+    "attachment_id": "A-6a221831",
+    "filename": "El_Paso_Pricing_Discussion.txt",
+    "file_type": "txt",
+    "page_count": 1,
+    "pages": [
+      {
+        "page_no": 1,
+        "text": "INTERNAL MEMO - El Paso Electric Pricing Strategy From: West Power Trading Desk Date: March 18, 2001 Pricing Discussion Summary: Customer requested fixed pricing at 42MWh for entire contract. We countered with time-of-day pricing to better reflect market conditions and manage our risk. Final Agreed Pricing: - Peak (6am-10pm): 55MWh - Off-peak: 35MWh - Blended average: 45MWh Rationale: 1. Summer peak demand in Southwest drives high spot prices 2. Our generation portfolio benefits from peak pricing 3. Customer gets predictability while we maintain margin flexibility Comparison to Market: - Spot market average (summer): 60-80MWh peak - Our pricing represents 20-30 discount to spot - Competitive vs. other suppliers (verified through market intel) Risk Mitigation: - Hedged 80 of expected delivery through forward purchases - Remaining 20 exposure acceptable given portfolio diversity - Weather derivatives considered for extreme heat scenarios Contract Value: 48M annually Expected Margin: 12-15"
+      }
+    ]
   }
 ]

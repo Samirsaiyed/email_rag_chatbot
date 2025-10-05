@@ -1,7 +1,7 @@
 """
 Extract text from attachments (PDF, DOCX, TXT, HTML).
 """
-import pymupdf as fitz
+import pymupdf  # PyMuPDF
 import docx
 from pathlib import Path
 from typing import List, Dict, Optional
@@ -12,12 +12,13 @@ from src.utils.logger import TraceLogger
 
 logger = TraceLogger(session_id="ingestion")
 
+
 class AttachmentExtractor:
-    """Extract text from various document formats."""
+    """Extract text from various attachment types."""
     
     def __init__(self):
         """Initialize attachment extractor."""
-        self.supported_formats = ['.pdf', '.docx', '.txt', '.html', '.htm']
+        pass
     
     def extract_from_pdf(self, pdf_path: Path) -> List[Dict]:
         """
@@ -32,7 +33,7 @@ class AttachmentExtractor:
         pages_data = []
         
         try:
-            doc = fitz.open(pdf_path)
+            doc = pymupdf.open(pdf_path)
             
             for page_num in range(len(doc)):
                 page = doc[page_num]
@@ -60,18 +61,19 @@ class AttachmentExtractor:
             docx_path: Path to DOCX file
             
         Returns:
-            List with single entry (DOCX treated as one page)
+            List with single dictionary containing all text
         """
         try:
             doc = docx.Document(docx_path)
             
             # Extract all paragraphs
-            text = '\n'.join([para.text for para in doc.paragraphs])
+            paragraphs = [para.text for para in doc.paragraphs if para.text.strip()]
+            text = '\n'.join(paragraphs)
             
             if text.strip():
                 logger.log_info(f"Extracted text from {docx_path.name}")
                 return [{
-                    'page_no': 1,
+                    'page_no': 1,  # DOCX doesn't have pages in the same way
                     'text': clean_text(text)
                 }]
             
@@ -88,10 +90,10 @@ class AttachmentExtractor:
             txt_path: Path to TXT file
             
         Returns:
-            List with single entry
+            List with single dictionary containing all text
         """
         try:
-            with open(txt_path, 'r', encoding='utf-8', errors='ignore') as f:
+            with open(txt_path, 'r', encoding='utf-8') as f:
                 text = f.read()
             
             if text.strip():
@@ -114,14 +116,14 @@ class AttachmentExtractor:
             html_path: Path to HTML file
             
         Returns:
-            List with single entry
+            List with single dictionary containing all text
         """
         try:
-            with open(html_path, 'r', encoding='utf-8', errors='ignore') as f:
+            with open(html_path, 'r', encoding='utf-8') as f:
                 html_content = f.read()
             
             soup = BeautifulSoup(html_content, 'html.parser')
-            text = soup.get_text(separator=' ', strip=True)
+            text = soup.get_text(separator='\n')
             
             if text.strip():
                 logger.log_info(f"Extracted text from {html_path.name}")
@@ -135,9 +137,9 @@ class AttachmentExtractor:
         
         return []
     
-    def extract_text(self, file_path: Path) -> Optional[Dict]:
+    def process_attachment(self, file_path: Path) -> Optional[Dict]:
         """
-        Extract text from attachment file.
+        Process a single attachment file.
         
         Args:
             file_path: Path to attachment file
@@ -145,64 +147,87 @@ class AttachmentExtractor:
         Returns:
             Dictionary with attachment data or None
         """
-        suffix = file_path.suffix.lower()
-        
-        if suffix not in self.supported_formats:
-            logger.log_info(f"Unsupported format: {suffix}")
-            return None
+        file_ext = file_path.suffix.lower()
         
         # Extract based on file type
-        pages_data = []
-        
-        if suffix == '.pdf':
+        if file_ext == '.pdf':
             pages_data = self.extract_from_pdf(file_path)
-        elif suffix == '.docx':
+            file_type = 'pdf'
+        elif file_ext in ['.docx', '.doc']:
             pages_data = self.extract_from_docx(file_path)
-        elif suffix == '.txt':
+            file_type = 'docx'
+        elif file_ext == '.txt':
             pages_data = self.extract_from_txt(file_path)
-        elif suffix in ['.html', '.htm']:
+            file_type = 'txt'
+        elif file_ext in ['.html', '.htm']:
             pages_data = self.extract_from_html(file_path)
+            file_type = 'html'
+        else:
+            logger.log_info(f"Unsupported file type: {file_path.name}")
+            return None
         
         if not pages_data:
             return None
         
-        # Generate attachment ID
-        attachment_id = generate_id('A', file_path.name)
-        
-        return {
-            'attachment_id': attachment_id,
+        # Create attachment metadata
+        attachment_data = {
+            'attachment_id': generate_id('A', file_path.stem),
             'filename': file_path.name,
-            'file_type': suffix[1:],  # Remove dot
-            'pages': pages_data,
-            'page_count': len(pages_data)
+            'file_type': file_type,
+            'page_count': len(pages_data),
+            'pages': pages_data
         }
+        
+        return attachment_data
     
-    def process_attachments_directory(self, attachments_path: Path = None) -> List[Dict]:
+    def process_attachments_directory(self, base_dir: Path) -> List[Dict]:
         """
-        Process all attachments in a directory.
+        Process all attachments in directory structure.
         
         Args:
-            attachments_path: Path to directory with attachments
+            base_dir: Base attachments directory
             
         Returns:
-            List of extracted attachment data
+            List of attachment data dictionaries
         """
-        if attachments_path is None:
-            attachments_path = ATTACHMENTS_DIR / "pdfs"
-        
-        if not attachments_path.exists():
-            logger.log_info(f"Attachments directory not found: {attachments_path}")
-            return []
-        
-        logger.log_info(f"Processing attachments from {attachments_path}")
-        
         attachments_data = []
         
-        for file_path in attachments_path.iterdir():
-            if file_path.is_file():
-                attachment_data = self.extract_text(file_path)
+        # Process PDFs
+        pdf_dir = base_dir / "pdfs"
+        if pdf_dir.exists():
+            for pdf_file in pdf_dir.glob("*.pdf"):
+                attachment_data = self.process_attachment(pdf_file)
+                if attachment_data:
+                    attachments_data.append(attachment_data)
+        
+        # Process DOCX files
+        docx_dir = base_dir / "docx"
+        if docx_dir.exists():
+            for docx_file in docx_dir.glob("*.docx"):
+                attachment_data = self.process_attachment(docx_file)
+                if attachment_data:
+                    attachments_data.append(attachment_data)
+        
+        # Process TXT files
+        txt_dir = base_dir / "txt"
+        if txt_dir.exists():
+            for txt_file in txt_dir.glob("*.txt"):
+                attachment_data = self.process_attachment(txt_file)
+                if attachment_data:
+                    attachments_data.append(attachment_data)
+        
+        # Process HTML files
+        html_dir = base_dir / "html"
+        if html_dir.exists():
+            for html_file in html_dir.glob("*.html"):
+                attachment_data = self.process_attachment(html_file)
+                if attachment_data:
+                    attachments_data.append(attachment_data)
+            for htm_file in html_dir.glob("*.htm"):
+                attachment_data = self.process_attachment(htm_file)
                 if attachment_data:
                     attachments_data.append(attachment_data)
         
         logger.log_info(f"Processed {len(attachments_data)} attachments")
+        
         return attachments_data
