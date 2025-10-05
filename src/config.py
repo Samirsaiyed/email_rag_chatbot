@@ -81,7 +81,7 @@ class LLMConfig:
     """LLM configuration - supports both Ollama and OpenAI."""
     
     # LLM Provider Selection
-    use_ollama: bool = False  # Set to True to use Ollama, False for OpenAI
+    use_ollama: bool = True  # Set to True to use Ollama, False for OpenAI
     
     # Ollama settings (open-source, local, free)
     ollama_model: str = "llama3.2:3b"  # Options: gemma3:1b, phi3:mini, llama3.2:3b
