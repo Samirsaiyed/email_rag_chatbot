@@ -43,48 +43,66 @@ class ThreadSession:
         self.logger.log_info(f"Session initialized for thread {thread_id}")
     
     def ask(self, question: str, top_k: int = 5) -> Dict:
-        """
-        Ask a question about the thread.
-        
-        Args:
-            question: User question
-            top_k: Number of documents to retrieve
-            
-        Returns:
-            Dictionary with answer and metadata
-        """
+        """Ask a question with trace logging."""
         trace_id = str(uuid.uuid4())[:8]
         
-        self.logger.log_info(f"[{trace_id}] Processing question: {question}")
+        # Log initial query
+        self.logger.log_trace("query_received", {
+            "trace_id": trace_id,
+            "question": question,
+            "thread_id": self.thread_id,
+            "top_k": top_k
+        })
         
-        # Step 1: Get memory context
+        # Get memory and rewrite
         memory_context = self.memory.get_context_for_rewrite()
-        
-        # Step 2: Rewrite query using memory
         rewrite_result = self.query_rewriter.rewrite(question, memory_context)
-        rewritten_query = rewrite_result['rewritten_query']
         
-        self.logger.log_info(f"[{trace_id}] Rewritten query: {rewritten_query}")
-        self.logger.log_info(f"[{trace_id}] Reasoning: {rewrite_result['reasoning']}")
+        # Log rewrite
+        self.logger.log_trace("query_rewritten", {
+            "trace_id": trace_id,
+            "original_query": question,
+            "rewritten_query": rewrite_result['rewritten_query'],
+            "reasoning": rewrite_result['reasoning']
+        })
         
-        # Step 3: Retrieve documents
-        retrieved_docs = self.retriever.retrieve(rewritten_query, top_k=top_k)
+        # Retrieve
+        retrieved_docs = self.retriever.retrieve(rewrite_result['rewritten_query'], top_k=top_k)
         
-        self.logger.log_info(f"[{trace_id}] Retrieved {len(retrieved_docs)} documents")
+        # Log retrieval
+        self.logger.log_trace("retrieval_complete", {
+            "trace_id": trace_id,
+            "num_docs": len(retrieved_docs),
+            "top_chunks": [
+                {
+                    "chunk_id": doc.metadata.get('chunk_id'),
+                    "message_id": doc.metadata.get('message_id'),
+                    "score": float(score),
+                    "doc_type": doc.metadata.get('doc_type')
+                }
+                for doc, score in retrieved_docs[:3]
+            ]
+        })
         
-        # Step 4: Generate answer
-        qa_result = self.qa_chain.answer(rewritten_query, retrieved_docs)
+        # Generate answer
+        qa_result = self.qa_chain.answer(rewrite_result['rewritten_query'], retrieved_docs)
         
-        self.logger.log_info(f"[{trace_id}] Generated answer with {len(qa_result['citations'])} citations")
+        # Log answer generation
+        self.logger.log_trace("answer_generated", {
+            "trace_id": trace_id,
+            "answer": qa_result['answer'],
+            "num_citations": len(qa_result['citations']),
+            "citations": qa_result['citations']
+        })
         
-        # Step 5: Update memory
+        # Update memory
         self.memory.add_turn(question, qa_result['answer'])
         
         # Build response
         response = {
             'answer': qa_result['answer'],
             'citations': qa_result['citations'],
-            'rewritten_query': rewritten_query,
+            'rewritten_query': rewrite_result['rewritten_query'],
             'rewrite_reasoning': rewrite_result['reasoning'],
             'retrieved_chunks': [
                 {
