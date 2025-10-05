@@ -1,5 +1,5 @@
 """
-QA chain using OpenAI.
+QA chain using OpenAI with inline citations.
 """
 from typing import List, Tuple, Dict
 from langchain.schema import Document
@@ -7,15 +7,15 @@ from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from .prompts import QA_SYSTEM_PROMPT
-from .citation_engine import CitationEngine
 from src.config import LLM_CONFIG
+import re
 from dotenv import load_dotenv
 
 load_dotenv()
 
 
 class QAChain:
-    """Question answering chain with OpenAI."""
+    """Question answering chain with OpenAI and inline citations."""
     
     def __init__(self):
         """Initialize QA chain."""
@@ -28,7 +28,6 @@ class QAChain:
         
         self.prompt = ChatPromptTemplate.from_template(QA_SYSTEM_PROMPT)
         self.chain = self.prompt | self.llm | StrOutputParser()
-        self.citation_engine = CitationEngine()
     
     def answer(
         self,
@@ -44,23 +43,26 @@ class QAChain:
                 'context_used': []
             }
         
-        # Build context from top 3 docs
+        # Build context with clear source attribution
         context_parts = []
         for i, (doc, score) in enumerate(retrieved_docs[:3], 1):
             metadata = doc.metadata
-            source = f"[Document {i}]"
+            
+            # Format: [Document N] Message: M-xxx, File: name.pdf, Page: N
+            source_line = f"[Document {i}] Message: {metadata.get('message_id', 'unknown')}"
+            
             if metadata.get('filename'):
-                source += f" {metadata['filename']}"
+                source_line += f", File: {metadata['filename']}"
             if metadata.get('page_no'):
-                source += f" (page {metadata['page_no']})"
+                source_line += f", Page: {metadata['page_no']}"
             
             content = doc.page_content[:500]
-            context_parts.append(f"{source}\n{content}\n")
+            context_parts.append(f"{source_line}\n{content}\n")
         
         context = "\n".join(context_parts)
         
         try:
-            # Generate answer
+            # Generate answer with citations already embedded
             raw_answer = self.chain.invoke({
                 "context": context,
                 "question": question
@@ -68,14 +70,11 @@ class QAChain:
             
             raw_answer = raw_answer.strip()
             
-            # Add citations
-            answer_with_citations, citations = self.citation_engine.add_citations(
-                raw_answer,
-                retrieved_docs[:3]
-            )
+            # Extract citations that the LLM added
+            citations = self._extract_citations(raw_answer, retrieved_docs)
             
             return {
-                'answer': answer_with_citations,
+                'answer': raw_answer,
                 'raw_answer': raw_answer,
                 'citations': citations,
                 'context_used': [
@@ -95,3 +94,28 @@ class QAChain:
                 'citations': [],
                 'context_used': []
             }
+    
+    def _extract_citations(self, answer: str, retrieved_docs: List[Tuple[Document, float]]) -> List[Dict]:
+        """Extract citations from answer text."""
+        citations = []
+        
+        # Pattern: [msg: M-xxxxx] or [msg: M-xxxxx, page: N]
+        pattern = r'\[msg:\s*([M\-a-f0-9]+)(?:,\s*page:\s*(\d+))?\]'
+        matches = re.findall(pattern, answer)
+        
+        for message_id, page_num in matches:
+            # Find the document this citation refers to
+            for doc, _ in retrieved_docs:
+                metadata = doc.metadata
+                if metadata.get('message_id') == message_id:
+                    citation = {
+                        'type': metadata.get('doc_type', 'unknown'),
+                        'message_id': message_id,
+                        'page': int(page_num) if page_num else None,
+                        'filename': metadata.get('filename'),
+                        'citation_text': f"[msg: {message_id}" + (f", page: {page_num}]" if page_num else "]")
+                    }
+                    citations.append(citation)
+                    break
+        
+        return citations
